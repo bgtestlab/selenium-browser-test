@@ -23,7 +23,7 @@ def driver():
 @pytest.fixture
 def data_generator():
     def _data(title=None, desc=None):
-        title = title or "Awesome my book"
+        title = title or "My awesome book"
         desc = desc or "Fantastic!"
         return {
             "title": title,
