@@ -89,10 +89,8 @@ def test_delete_all_posts(driver):
 
 @pytest.mark.parametrize("post", FICTION_BEST_SELLERS)
 def test_add_ten_readable_posts_in_korean(driver, post):
+    # Write post
     _write_post(driver, post)
-    # Write ten posts
-    # for post in posts:
-    #     _write_post(driver, post)
 
     # Set WebDriverWait
     wait = WebDriverWait(driver, 3, poll_frequency=1)
@@ -121,5 +119,6 @@ def test_get_publisher_book_titles(driver):
     target_title_value = f"{target_description_value}/preceding-sibling::h1"
     target_titles = driver.find_elements(By.XPATH, target_title_value)
 
+    # Print titles to console
     for title in target_titles:
         print(f"title: {title.text}")
