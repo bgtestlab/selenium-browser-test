@@ -14,7 +14,7 @@ PIP Dependencies
 
 .. _`Python 3.9+`: https://www.python.org/downloads/
 
-Precondition
+Prerequites
 ^^^^^^^^
 Run the Frontend server first by following instructions in the 'Frontend' directory
 
