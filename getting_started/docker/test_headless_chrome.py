@@ -9,7 +9,7 @@ def test_run_headless_chrome():
     options.add_argument("--dns-prefetch-disable")
 
     driver = webdriver.Remote(
-        command_executor="http://localhost:4444",
+        command_executor="http://selenium-hub:4444",
         options=options,
     )
 
