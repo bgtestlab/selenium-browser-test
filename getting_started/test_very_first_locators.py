@@ -58,7 +58,7 @@ def _write_post(driver, data_generator, test_title=None, test_desc=None):
 
 
 def test_open_test_page(driver):
-    """Precondition: clone and run a test app from https://github.com/ibrahima92/next-typescript-example"""
+    """Prerequisites: clone and run a test app from https://github.com/ibrahima92/next-typescript-example"""
     driver.get("http://localhost:3000/")
 
     # Check if landed
