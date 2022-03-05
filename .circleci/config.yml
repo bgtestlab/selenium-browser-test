@@ -4,6 +4,8 @@ version: 2.1
 jobs:
   build:
     working_directory: ~/selenium-browser-test/docker
+    context:
+      - test
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -12,7 +14,7 @@ jobs:
       - setup_remote_docker
       - run:
          name: list files
-         command: ls -lsrt ~/selenium-browser-test/docker
+         command: ls -ll ~/selenium-browser-test/docker
       - run:
           name: Install dependencies
           command: |
