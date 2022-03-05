@@ -3,12 +3,12 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/selenium-browser-test
+    working_directory: ~/selenium-browser-test/docker
     docker:
       - image: docker:17.05.0-ce-git
     steps:
       - checkout:
-          path: ~/selenium-browser-test/docker
+          path: ~/selenium-browser-test
       - setup_remote_docker
       - run:
          name: list files
@@ -16,6 +16,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            find "$PWD"
             apk add --no-cache py-pip=9.0.0-r1
             pip install docker-compose==1.15.0
       - run:
