@@ -3,7 +3,7 @@
 version: 2.1
 jobs:
   build:
-    working_directory: /selenium-browser-test/docker
+    working_directory: /selenium-browser-test/tree/main/docker
     docker:
       - image: docker:17.05.0-ce-git
     steps:
