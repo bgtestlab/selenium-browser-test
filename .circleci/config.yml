@@ -3,13 +3,16 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/selenium-browser-test/docker
+    working_directory: ~/selenium-browser-test
     docker:
       - image: docker:17.05.0-ce-git
     steps:
       - checkout:
           path: ~/selenium-browser-test/docker
       - setup_remote_docker
+      - run:
+         name: list files
+         command: ls -lsrt ~/selenium-browser-test
       - run:
           name: Install dependencies
           command: |
@@ -18,7 +21,6 @@ jobs:
       - run:
           name: Run tests
           command: |
-            pwd
             docker-compose up -d
             docker-compose run pytest test_headless_chrome.py
       - deploy:
