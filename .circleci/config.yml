@@ -4,8 +4,6 @@ version: 2.1
 jobs:
   build:
     working_directory: ~/selenium-browser-test/docker
-    context:
-      - test
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -29,7 +27,5 @@ jobs:
           name: Push application Docker image
           command: |
             docker login -e $DOCKER_HUB_EMAIL -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
-            docker tag dockerapp_dockerapp $DOCKER_HUB_USER_ID/docker_pytest:$CIRCLE_SHA1
-            docker tag dockerapp_dockerapp $DOCKER_HUB_USER_ID/docker_pytest:latest
-            docker push $DOCKER_HUB_USER_ID/docker_pytest:$CIRCLE_SHA1
+            docker tag docker_pytest $DOCKER_HUB_USER_ID/docker_pytest:latest
             docker push $DOCKER_HUB_USER_ID/docker_pytest:latest
