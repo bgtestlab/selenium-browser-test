@@ -25,13 +25,3 @@ jobs:
     - name: Extract test results
       run: |
         docker cp test-runner:/app/output .
-        
-    - name: Generate reports 
-      run: |
-        allure generate output/
-        
-    - name: Publishing Allure artipacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: allure-report
-        path: allure-report
