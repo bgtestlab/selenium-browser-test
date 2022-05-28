@@ -21,4 +21,4 @@ jobs:
       run: |
         docker ps -a
         docker cp test-runner:/app/output ./output
-        ls
+        ls ./output
