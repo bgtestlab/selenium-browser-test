@@ -15,7 +15,7 @@ jobs:
         docker-compose -f ./docker/docker-compose.yaml config
         docker-compose -f ./docker/docker-compose.yaml up \
         --abort-on-container-exit \
-        --exit-code-from pytest
+        --exit-code-from test-runner
 
     - name: Close compose
       run:
