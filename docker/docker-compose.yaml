@@ -7,6 +7,8 @@ services:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
+    depends_on:
+      - pytest
 
   chrome:
     image: selenium/node-chrome:latest
@@ -26,9 +28,4 @@ services:
     entrypoint: [ "/bin/sh", "./wait-for-grid.sh" ]
     command:
       - pytest
-    depends_on:
-      - selenium-hub
-      - chrome
     tty: true
-
-
