@@ -13,3 +13,5 @@ RUN pip3 install --upgrade pip && \
 COPY . ./app
 WORKDIR /app
 RUN chmod +x wait-for-grid.sh
+RUN mkdir /output
+RUN chmod +x /output
