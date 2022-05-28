@@ -25,7 +25,6 @@ services:
     container_name: test-runner
     entrypoint: [ "/bin/sh", "./wait-for-grid.sh" ]
     command:
-      - mkdir output
       - pytest --alluredir=./output
       - ls ./output
     tty: true
