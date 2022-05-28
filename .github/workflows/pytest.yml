@@ -20,5 +20,5 @@ jobs:
     - name: Extract test results
       run: |
         docker ps -a
-        mkdir output
-        sudo ls ./output
+        docker cp test-runner:/app/output ./output
+        ls
