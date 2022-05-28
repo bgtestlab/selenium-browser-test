@@ -10,10 +10,6 @@ COPY requirements.txt ./
 RUN pip3 install --upgrade pip && \
     pip3 install -r requirements.txt
 
-COPY . ./app
-WORKDIR /app/docker
-RUN ls
-RUN chmod +x wait-for-grid.sh
-
+COPY ./docker ./app
 WORKDIR /app
-
+RUN chmod +x wait-for-grid.sh
