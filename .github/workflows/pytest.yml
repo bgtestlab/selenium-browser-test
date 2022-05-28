@@ -19,7 +19,9 @@ jobs:
         
     - name: Extract test results
       run: |
-        mkdir ./output
         docker ps -a
-        docker cp test-runner:/app/output ./output
-        ls ./output
+        docker cp test-runner:/app/output .
+        
+    - name: Retrieve
+      run: |
+        ls .
