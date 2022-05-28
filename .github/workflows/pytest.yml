@@ -9,6 +9,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      
+    - name: Install dependencies
+      run: |
+        brew update
+        brew install allure
 
     - name: Run pytest
       run: |
@@ -19,9 +24,14 @@ jobs:
         
     - name: Extract test results
       run: |
-        docker ps -a
         docker cp test-runner:/app/output .
         
-    - name: Retrieve
+    - name: Generate reports 
       run: |
-        ls output
+        allure generate output/
+        
+    - name: Publishing Allure artipacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: allure-report
+        path: allure-report
