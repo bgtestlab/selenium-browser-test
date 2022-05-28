@@ -20,11 +20,11 @@ services:
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
 
-  pytest:
+  test-runner:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: pytest
+    container_name: test-runner
     entrypoint: [ "/bin/sh", "./wait-for-grid.sh" ]
     command:
       - pytest
