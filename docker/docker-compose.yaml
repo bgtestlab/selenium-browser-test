@@ -23,6 +23,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: pytest
+    entrypoint: [ "/bin/sh", "./docker/wait-for-grid.sh" ]
     depends_on:
       - selenium-hub
       - chrome
