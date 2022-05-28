@@ -12,6 +12,7 @@ RUN pip3 install --upgrade pip && \
 
 COPY . ./app
 WORKDIR /app/docker
+RUN ls
 RUN chmod +x wait-for-grid.sh
 
 WORKDIR /app
