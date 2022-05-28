@@ -16,3 +16,9 @@ jobs:
         docker-compose -f ./docker/docker-compose.yaml up \
         --abort-on-container-exit \
         --exit-code-from test-runner
+        
+    - name: Extract test results
+      run: |
+        mkdir output
+        docker cp test-runner:/app/output/* ./output
+        sudo ls ./output
