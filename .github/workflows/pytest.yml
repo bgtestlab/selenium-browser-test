@@ -1,0 +1,20 @@
+name: pytest workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  login:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run pytest
+      run: |
+        docker-compose -f ./docker/docker-compose.yml config
+        docker-compose -f ./docker/docker-compose.yml up
+
+    - name: Close compose
+      run:
+        docker-compose down
