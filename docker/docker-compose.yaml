@@ -26,5 +26,4 @@ services:
     entrypoint: [ "/bin/sh", "./wait-for-grid.sh" ]
     command:
       - pytest --alluredir=./output
-      - ls ./output
     tty: true
