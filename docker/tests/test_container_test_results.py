@@ -5,5 +5,3 @@ def test_if_succeeded(driver):
 def test_if_failed(driver):
     driver.get(url="https://www.naver.com/")
     assert False
-
-
