@@ -16,6 +16,7 @@ jobs:
         docker-compose -f ./docker/docker-compose.yaml up \
         --abort-on-container-exit \
         --exit-code-from test-runner
+        ls .
         
     - name: Extract test results
       run: |
