@@ -25,5 +25,5 @@ services:
     container_name: test-runner
     entrypoint: [ "/bin/sh", "./wait-for-grid.sh" ]
     command:
-      - pytest --alluredir=./output
+      - pytest --html=report.html --self-contained-html
     tty: true
