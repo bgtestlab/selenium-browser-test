@@ -25,5 +25,5 @@ jobs:
         
     - name: Send test results to Slack
       run: |
-        curl -F file=@report.html -F "initial_comment=Test Report" -F channels=C02NNKV205R -H "Authorization: Bearer {{ secrets.SLACK_BOT_TOKEN }}" https://slack.com/api/files.upload
+        curl -F file=@report.html -F "initial_comment=Test Report" -F channels=C02NNKV205R -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" https://slack.com/api/files.upload
       if: always()
