@@ -10,7 +10,7 @@ def pytest_runtest_makereport(item, call):
     extra = getattr(report, "extra", [])
     if report.when == "call":
         # always add url to report
-        extra.append(pytest_html.extras.url("https://dashboard-stagingqa.buzzvil.com/"))
+        extra.append(pytest_html.extras.url("https://google.com"))
         xfail = hasattr(report, "wasxfail")
         if (report.skipped and xfail) or (report.failed and not xfail):
             # only add additional html on failure
