@@ -20,13 +20,7 @@ jobs:
         
     - name: Extract test results
       run: |
-        docker cp test-runner:/app/test.log .
         docker cp test-runner:/app/report.html .
-      if: always()
-    
-    - name: Send test logs to Slack
-      run: |
-        curl -F file=@test.log -F "initial_comment=Test logs" -F channels=C02NNKV205R -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" https://slack.com/api/files.upload
       if: always()
       
     - name: Send test report to Slack
