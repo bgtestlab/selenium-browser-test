@@ -24,6 +24,5 @@ services:
       dockerfile: Dockerfile
     container_name: test-runner
     entrypoint: [ "/bin/sh", "./wait-for-grid.sh" ]
-    command:
-      - /bin/sh -c "pytest --html=report.html --self-contained-html | tee test.log"
+    command: bash -c "pytest --html=report.html --self-contained-html | tee test.log"
     tty: true
