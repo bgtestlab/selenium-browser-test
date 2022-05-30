@@ -19,14 +19,14 @@ jobs:
         
     - name: Extract test results
       run: |
-        docker cp test-runner:/app/output .
+        docker cp test-runner:/app/report.html .
         
     - name: Send test results to Slack
       id: slack
       uses: slackapi/slack-github-action@v1.19.0
       with:
         channel-id: test
-        payload-file-path: "./output/*.json"
+        payload-file-path: "report.html"
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
