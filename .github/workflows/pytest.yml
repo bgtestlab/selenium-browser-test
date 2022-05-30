@@ -24,12 +24,6 @@ jobs:
       if: always()
         
     - name: Send test results to Slack
-      id: slack
-      uses: slackapi/slack-github-action@v1.19.0
-      with:
-        channel-id: test
-        payload-file-path: "report.html"
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      run: |
+        curl -F file=@report.html -F "initial_comment=Test Report" -F channels=C02NNKV205R -H "Authorization: Bearer {{ secrets.SLACK_BOT_TOKEN }}" https://slack.com/api/files.upload
       if: always()
