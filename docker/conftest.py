@@ -1,19 +1,52 @@
+import os
+import time
+from datetime import datetime
+
 import pytest
 from selenium import webdriver
+from collections import OrderedDict
+
+test_results = OrderedDict()
 
 
-@pytest.hookimpl(hookwrapper=True)
+def get_current_test():
+    """Just a helper function to extract the current test"""
+    full_name = os.environ.get("PYTEST_CURRENT_TEST").split(" ")[0]
+    test_file = full_name.split("::")[0].split("/")[-1].split(".py")[0]
+    test_name = full_name.split("::")[1]
+    return full_name, test_file, test_name
+
+
+def _take_screenshot(driver, nodeid):
+    time.sleep(1)
+    path = f"{os.getcwd()}/screenshots/"
+    if not (os.path.isdir(path)):
+        os.makedirs(os.path.join(path))
+
+    file_name = (
+        f"{datetime.today().strftime('%Y-%m-%d_%H:%M')}_{nodeid.split('::')[1]}.png"
+    )
+
+    driver.save_screenshot(f"{path}{file_name}")
+    return f"{path}{file_name}"
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     pytest_html = item.config.pluginmanager.getplugin("html")
     outcome = yield
     report = outcome.get_result()
     extra = getattr(report, "extra", [])
+
     if report.when == "call":
-        # always add url to report
-        extra.append(pytest_html.extras.url("https://google.com"))
+        # Setup report file
         xfail = hasattr(report, "wasxfail")
         if (report.skipped and xfail) or (report.failed and not xfail):
             # only add additional html on failure
+            driver = item.funcargs["driver"]
+            image_file = _take_screenshot(driver, nodeid=report.nodeid)
+            extra.append(pytest_html.extras.image(image_file))
+            extra.append(pytest_html.extras.url(image_file, name="screenshot"))
             extra.append(pytest_html.extras.html("<div>Additional HTML</div>"))
         report.extra = extra
 
