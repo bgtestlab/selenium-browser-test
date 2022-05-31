@@ -28,8 +28,8 @@ def _take_screenshot(driver, nodeid):
     )
 
     driver.save_screenshot(f"{path}{file_name}")
-    return f"{path}{file_name}"
-
+    screenshot = driver.get_screenshot_as_base64()
+    return screenshot
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
@@ -44,9 +44,8 @@ def pytest_runtest_makereport(item, call):
         if (report.skipped and xfail) or (report.failed and not xfail):
             # only add additional html on failure
             driver = item.funcargs["driver"]
-            image_file = _take_screenshot(driver, nodeid=report.nodeid)
-            extra.append(pytest_html.extras.image(image_file))
-            extra.append(pytest_html.extras.url(image_file, name="screenshot"))
+            screenshot = _take_screenshot(driver, nodeid=report.nodeid)
+            extra.append(pytest_html.extras.image(screenshot, ''))
             extra.append(pytest_html.extras.html("<div>Additional HTML</div>"))
         report.extra = extra
 
