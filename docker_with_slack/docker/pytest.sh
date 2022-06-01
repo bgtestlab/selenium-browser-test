@@ -3,11 +3,11 @@
 options=("--html=report.html")
 options+=("--self-contained-html")
 
-if [ -z "$1" ]
+if [ -z "$@" ]
   then
     echo "Run full test cases"
   else
-    options+=("-m" "$1")
+    options+=("-m" "$@")
 fi
 
 echo "about to launch pytest ${options[@]}"
