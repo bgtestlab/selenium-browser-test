@@ -1,0 +1,21 @@
+# Git
+.git
+.gitignore
+
+# Python
+*.pyc
+.pytest_cache
+.idea
+
+# Environments
+.env
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Custom
+.github
+screenshots/
+*.rst

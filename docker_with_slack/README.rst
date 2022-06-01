@@ -1,4 +1,4 @@
-Dockerized pytest
+Dockerized pytest with BDD scenarios
 -------------
 Prerequites
 ^^^^^^^^

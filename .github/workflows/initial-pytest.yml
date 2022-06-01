@@ -1,0 +1,18 @@
+name: initial pytest test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Run pytest
+      run: |
+        docker-compose -f ./docker_intial_test/docker-compose.yaml config
+        docker-compose -f ./docker_initial_test/docker-compose.yaml up \
+        --abort-on-container-exit \
+        --exit-code-from test-runner

@@ -1,4 +1,4 @@
-name: pytest workflow
+name: pytest with slack app
 
 on:
   workflow_dispatch:
@@ -9,20 +9,19 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      
+
     - name: Run pytest
       run: |
-        docker-compose -f ./docker/docker-compose.yaml config
-        docker-compose -f ./docker/docker-compose.yaml up \
+        docker-compose -f ./docker_with_slack/docker-compose.yaml config
+        docker-compose -f ./docker_with_slack/docker-compose.yaml up \
         --abort-on-container-exit \
         --exit-code-from test-runner
-        ls .
-        
+
     - name: Extract test results
       run: |
         docker cp test-runner:/app/report.html .
       if: always()
-      
+
     - name: Send test report to Slack
       run: |
         curl -F file=@report.html -F "initial_comment=Test Report" -F channels=C02NNKV205R -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" https://slack.com/api/files.upload
