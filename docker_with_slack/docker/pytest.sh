@@ -2,7 +2,7 @@
 
 options=()
 
-if [ -z "$@" ]
+if [ -z "$*" ]
   then
     echo "Run full test cases"
   else
@@ -14,4 +14,3 @@ options+=("--self-contained-html")
 
 echo "About to launch pytest ${options[@]}"
 pytest "${options[@]}"
-
