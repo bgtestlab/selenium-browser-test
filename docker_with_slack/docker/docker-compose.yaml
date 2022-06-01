@@ -25,8 +25,7 @@ services:
     container_name: test-runner
     platform: linux/amd64
     entrypoint: [ "/bin/sh", "./docker/wait-for-grid.sh" ]
-    command: 
-      - pytest --html=report.html --self-contained-html
+    command: [ "/bin/sh", "./docker/pytest.sh" ]
     depends_on:
       - selenium-hub
       - chrome
