@@ -2,6 +2,9 @@ name: Pytest with slack app
 
 on:
   workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Test scenario tags'  
 
 jobs:
   pytest:
@@ -12,6 +15,7 @@ jobs:
 
     - name: Run pytest
       run: |
+        echo "Tags: ${{ github.event.inputs.tags }}" 
         docker-compose -f ./docker_with_slack/docker/docker-compose.yaml config
         docker-compose -f ./docker_with_slack/docker/docker-compose.yaml up \
         --abort-on-container-exit \
