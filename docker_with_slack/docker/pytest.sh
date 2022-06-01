@@ -9,6 +9,7 @@ if [ -z "$@" ]
     options+=("-m" "\"$@\"")
 fi
 
+options+=("-m" "functional and engine")
 options+=("--html=report.html")
 options+=("--self-contained-html")
 
