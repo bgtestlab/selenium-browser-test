@@ -12,7 +12,7 @@ jobs:
       
     - name: Run pytest
       run: |
-        docker-compose -f ./docker_intial_test/docker-compose.yaml config
+        docker-compose -f ./docker_initial_test/docker-compose.yaml config
         docker-compose -f ./docker_initial_test/docker-compose.yaml up \
         --abort-on-container-exit \
         --exit-code-from test-runner
