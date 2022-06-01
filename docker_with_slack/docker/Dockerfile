@@ -13,6 +13,5 @@ RUN pip3 install --upgrade pip && \
 COPY . ./app
 WORKDIR /app/docker
 RUN chmod +x wait-for-grid.sh
-RUN chmod +x pytest.sh
 
 WORKDIR /app
