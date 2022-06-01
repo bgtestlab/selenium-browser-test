@@ -4,8 +4,6 @@ from datetime import datetime
 
 import pytest
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
 
 def _take_screenshot(driver, nodeid):
     time.sleep(1)
@@ -43,11 +41,15 @@ def pytest_runtest_makereport(item, call):
 
 @pytest.fixture(scope="session", autouse=True)
 def driver():
-    service = Service(executable_path=ChromeDriverManager().install())
     options = webdriver.ChromeOptions()
-    options.add_experimental_option("detach", True)  # to keep browser open
-    driver = webdriver.Chrome(service=service, options=options)
-    driver.maximize_window()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Remote(
+        command_executor="http://selenium-hub:4444",
+        options=options,
+    )
+    driver.set_window_size(1920, 1080)
 
     yield driver
     driver.quit()
