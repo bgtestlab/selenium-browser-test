@@ -7,7 +7,7 @@ if [ -z "$@" ]
   then
     echo "Run full test cases"
   else
-    options+=("-m" "$@")
+    options+=("-m" "\"$@\"")
 fi
 
 echo "about to launch pytest ${options[@]}"
