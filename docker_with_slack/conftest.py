@@ -6,6 +6,8 @@ from datetime import datetime
 import pytest
 from selenium import webdriver
 from collections import OrderedDict
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
 
 test_results = OrderedDict()
 
@@ -52,17 +54,11 @@ def pytest_runtest_makereport(item, call):
         report.extra = extra
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="package", autouse=True)
 def driver():
+    service = ChromeService(executable_path=ChromeDriverManager().install())
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    driver = webdriver.Remote(
-        command_executor="http://selenium-hub:4444",
-        options=options,
-    )
-    driver.set_window_size(1920, 1080)
-
+    options.add_experimental_option("detach", True)  # to keep browser open
+    driver = webdriver.Chrome(service=service, options=options)
+    driver.maximize_window()
     yield driver
-    driver.quit()
