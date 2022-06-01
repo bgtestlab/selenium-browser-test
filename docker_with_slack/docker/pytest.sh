@@ -2,11 +2,13 @@
 
 options=()
 
-if [ -z "$*" ]
+echo "$1"
+
+if [ -z "${*:2}" ]
   then
     echo "Run full test cases"
   else
-    options+=("-m" "$*")
+    options+=("-m" "${*:2}")
 fi
 
 options+=("--html=report.html")
