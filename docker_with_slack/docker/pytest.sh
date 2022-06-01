@@ -1,7 +1,6 @@
 #!/bin/bash
 
-options=("--html=report.html")
-options+=("--self-contained-html")
+options=()
 
 if [ -z "$@" ]
   then
@@ -9,6 +8,9 @@ if [ -z "$@" ]
   else
     options+=("-m" "\"$@\"")
 fi
+
+options+=("--html=report.html")
+options+=("--self-contained-html")
 
 echo "about to launch pytest ${options[@]}"
 pytest "${options[@]}"
