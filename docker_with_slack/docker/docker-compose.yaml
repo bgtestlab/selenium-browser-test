@@ -25,7 +25,7 @@ services:
     container_name: test-runner
     platform: linux/amd64
     entrypoint: [ "/bin/bash", "./docker/wait-for-grid.sh" ]
-    command: [ "/bin/bash", "./docker/pytest.sh",  ${PYTEST_TAGS} ]
+    command: [ "/bin/bash", "./docker/pytest.sh",  "${PYTEST_TAGS}" ]
     depends_on:
       - selenium-hub
       - chrome
