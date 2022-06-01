@@ -5,7 +5,7 @@ on:
     inputs:
       tags:
         description: 'Test scenario tags'
-      test-mode:
+      testmode:
         description: 'Test mode'
 
 jobs:
@@ -19,6 +19,7 @@ jobs:
       run: |
         touch .test.env
         echo "PYTEST_TAGS=${{ github.event.inputs.tags }}" >> .test.env
+        echo "TEST_MODE=${{ github.event.inputs.testmode }}" >> .test.env
         cat .test.env
 
     - name: Run pytest
