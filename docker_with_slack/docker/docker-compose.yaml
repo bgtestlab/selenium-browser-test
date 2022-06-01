@@ -24,8 +24,8 @@ services:
       dockerfile: ./docker/Dockerfile
     container_name: test-runner
     platform: linux/amd64
-    entrypoint: [ "/bin/sh", "./docker/wait-for-grid.sh" ]
-    command: [ "/bin/sh", "./docker/pytest.sh" ]
+    entrypoint: [ "/bin/bash", "./docker/wait-for-grid.sh" ]
+    command: [ "/bin/bash", "./docker/pytest.sh" ]
     depends_on:
       - selenium-hub
       - chrome
