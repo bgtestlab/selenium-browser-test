@@ -6,7 +6,7 @@ if [ -z "$*" ]
   then
     echo "Run full test cases"
   else
-    options+=("-m" "$@")
+    options+=("-m" "$*")
 fi
 
 options+=("--html=report.html")
