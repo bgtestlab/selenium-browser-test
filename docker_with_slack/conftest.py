@@ -6,8 +6,6 @@ from datetime import datetime
 import pytest
 from selenium import webdriver
 from collections import OrderedDict
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
 
 test_results = OrderedDict()
 
