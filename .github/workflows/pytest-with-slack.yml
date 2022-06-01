@@ -1,4 +1,4 @@
-name: pytest with slack app
+name: Pytest with slack app
 
 on:
   workflow_dispatch:
@@ -12,8 +12,8 @@ jobs:
 
     - name: Run pytest
       run: |
-        docker-compose -f ./docker_with_slack/docker-compose.yaml config
-        docker-compose -f ./docker_with_slack/docker-compose.yaml up \
+        docker-compose -f ./docker_with_slack/docker/docker-compose.yaml config
+        docker-compose -f ./docker_with_slack/docker/docker-compose.yaml up \
         --abort-on-container-exit \
         --exit-code-from test-runner
 
