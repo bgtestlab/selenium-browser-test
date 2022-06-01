@@ -5,6 +5,7 @@ from datetime import datetime
 import pytest
 from selenium import webdriver
 
+
 def _take_screenshot(driver, nodeid):
     time.sleep(1)
     path = f"{os.getcwd()}/screenshots/"
@@ -34,7 +35,7 @@ def pytest_runtest_makereport(item, call):
             # only add additional html on failure
             driver = item.funcargs["driver"]
             screenshot = _take_screenshot(driver, nodeid=report.nodeid)
-            extra.append(pytest_html.extras.image(screenshot, ''))
+            extra.append(pytest_html.extras.image(screenshot, ""))
             extra.append(pytest_html.extras.html("<div>Additional HTML</div>"))
         report.extra = extra
 

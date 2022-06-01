@@ -20,4 +20,3 @@ def driver():
 def page(driver):
     page = Page(driver)
     yield page
-

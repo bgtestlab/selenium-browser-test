@@ -61,7 +61,9 @@ class TestMyPostsPage:
         post_title = post["title"]
         post_description = post["description"]
         title_value = f"//h1[@class='Card--body-title' and text()='{post_title}']"
-        description_value = f"//p[@class='Card--body-text' and text()='{post_description}']"
+        description_value = (
+            f"//p[@class='Card--body-text' and text()='{post_description}']"
+        )
 
         # Set WebDriverWait
         wait = WebDriverWait(page.driver, 3, poll_frequency=1)

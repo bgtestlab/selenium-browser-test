@@ -32,6 +32,7 @@ def _take_screenshot(driver, nodeid):
     screenshot = driver.get_screenshot_as_base64()
     return screenshot
 
+
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     pytest_html = item.config.pluginmanager.getplugin("html")
@@ -46,7 +47,7 @@ def pytest_runtest_makereport(item, call):
             # only add additional html on failure
             driver = item.funcargs["driver"]
             screenshot = _take_screenshot(driver, nodeid=report.nodeid)
-            extra.append(pytest_html.extras.image(screenshot, ''))
+            extra.append(pytest_html.extras.image(screenshot, ""))
             extra.append(pytest_html.extras.html("<div>Additional HTML</div>"))
         report.extra = extra
 

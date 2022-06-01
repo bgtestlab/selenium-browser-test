@@ -22,5 +22,5 @@ def no_error_message(driver):
 
 @given(parsers.parse("I can see the search engine {website} homepage"))
 def go_to_search_engine(driver, website):
-    driver.get(url=website)
+    driver.get(url=f"https://www.{website}")
     driver.implicitly_wait(3)

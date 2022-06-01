@@ -6,8 +6,10 @@ from selenium.webdriver.support import expected_conditions as EC
 
 DEFAULT_WAIT_TIME = 60
 
+
 class Element:
     """A class for an page element"""
+
     def __init__(self, driver: WebDriver, locator: Any):
         self.driver = driver
         self.locator = locator
@@ -17,7 +19,7 @@ class Element:
         """Check if an element is visible. Return it if found"""
         element = WebDriverWait(driver=self.driver, timeout=time).until(
             EC.visibility_of_element_located(locator=self.locator)
-            )
+        )
 
         self.web_element = element
         return self.web_element
