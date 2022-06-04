@@ -11,6 +11,9 @@ on:
         default: 'Prod'
       tags:
         description: 'Test scenario tags'
+      mock_tags:
+        description: 'Only used for priting Test scenario tags'
+        default: ''
 
 jobs:
   pytest:
@@ -63,7 +66,7 @@ jobs:
                   },
                   {
                     "type": "mrkdwn",
-                    "text": "*Target:*\n"
+                    "text": "*Target:*\n${{ github.event.inputs.tags || github.event.inputs.mock_tags }}"
                   }
                 ]
               }
