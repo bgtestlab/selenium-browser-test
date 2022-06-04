@@ -44,43 +44,31 @@ jobs:
         channel-id: C02NNKV205R
         payload: |
           {
-            "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+            "text": "GitHub Action test result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+            "thread_ts": ${{ github.event.inputs.thread_ts }},
             "blocks": [
               {
-                "type": "section",
+                "type": "header",
                 "text": {
-                  "type": "mrkdwn",
-                  "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  "type": "plain_text",
+                  "text":  "Test result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
                 }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Server:*\n${{ github.event.inputs.environment }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Target:*\n${{ github.event.inputs.tags }}"
+                  }
+                ]
               }
             ]
           }
-#         payload: |
-#           {
-#             "text": "GitHub Action test result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-#             "blocks": [
-#               {
-#                 "type": "header",
-#                 "text": {
-#                   "type": "plain_text",
-#                   "text":  "Test result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-#                 }
-#               },
-#               {
-#                 "type": "section",
-#                 "fields": [
-#                   {
-#                     "type": "mrkdwn",
-#                     "text": "*Server:*\n${{ github.event.inputs.environment }}"
-#                   },
-#                   {
-#                     "type": "mrkdwn",
-#                     "text": "*Target:*\n${{ github.event.inputs.tags }}"
-#                   }
-#                 ]
-#               }
-#             ]
-#           }
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       if: always()
