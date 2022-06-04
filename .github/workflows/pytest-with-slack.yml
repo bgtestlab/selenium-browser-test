@@ -44,6 +44,7 @@ jobs:
         channel-id: C02NNKV205R
         payload: |
           {
+            "thread_ts": "${{ github.event.inputs.thread_ts }}",
             "blocks": [
               {
                 "type": "header",
