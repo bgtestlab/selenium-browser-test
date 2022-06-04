@@ -3,10 +3,10 @@ name: Pytest with slack app
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        description: 'Test environment'
       tags:
         description: 'Test scenario tags'
-      testmode:
-        description: 'Test mode'
 
 jobs:
   pytest:
@@ -18,8 +18,8 @@ jobs:
     - name: Create env file
       run: |
         touch .test.env
+        echo "TEST_ENVIRONMENT=${{ github.event.inputs.environment }}" >> .test.env
         echo "PYTEST_TAGS=${{ github.event.inputs.tags }}" >> .test.env
-        echo "TEST_MODE=${{ github.event.inputs.testmode }}" >> .test.env
         cat .test.env
 
     - name: Run pytest
@@ -54,7 +54,7 @@ jobs:
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "*Server:*\nProd"
+                    "text": "*Server:*\n${{ github.event.inputs.environment }}"
                   },
                   {
                     "type": "mrkdwn",
