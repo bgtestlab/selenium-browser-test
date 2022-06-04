@@ -8,6 +8,7 @@ on:
         required: true
       environment:
         description: 'Test environment'
+        default: 'Prod'
       tags:
         description: 'Test scenario tags'
 
@@ -52,6 +53,19 @@ jobs:
                   "type": "plain_text",
                   "text":  "Test result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
                 }
+              },
+             {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Server:*\n${{ github.event.inputs.environment }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Target:*\n"
+                  }
+                ]
               }
             ]
           }
