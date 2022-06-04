@@ -39,7 +39,7 @@ jobs:
       
     - name: Send test results message to Slack
       id: slack
-      uses: slackapi/slack-github-action@v1.18.0
+      uses: slackapi/slack-github-action@v1.19.0
       with:
         channel-id: C036YUELQPK
         payload: |
