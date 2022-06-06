@@ -58,17 +58,23 @@ jobs:
         --exit-code-from test-runner
 
     - name: Extract test results
+      id: set-results
       run: |
         docker cp test-runner:/app/results.json .
         cat ./results.json
+        content='cat ./results.json'
+        content="${content//'%'/'%25'}"
+        content="${content//$'\n'/'%0A'}"
+        content="${content//$'\r'/'%0D'}"
+        echo "::set-output name=resultsJson::$content"
       if: always()
 
     - name: Extract report HTML
       run: docker cp test-runner:/app/report.html .
-      if: ${{ steps.pytest.outcome }} == 'failure'
+      if: failure()
       
-    - name: Send success test results message to Slack
-      id: slack-test-success
+    - name: Send test results message to Slack
+      id: slack-test-results
       uses: slackapi/slack-github-action@v1.19.0
       with:
         channel-id: C02NNKV205R
@@ -80,9 +86,18 @@ jobs:
                 "type": "header",
                 "text": {
                   "type": "plain_text",
-                  "text":  "Test result: :white_check_mark: ${{ job.status }}"
+                  "text":  "Test result: ${{ job.status }}"
                 }
               },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Total:*\n${{fromJson(steps.set-results.outputs.resultsJson).total}}"
+                  }
+                ]
+              }
              {
                 "type": "section",
                 "fields": [
@@ -100,68 +115,11 @@ jobs:
           }
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      if: ${{ steps.pytest.outcome }} == 'success'
-      
-    - name: Send failure test results message to Slack
-      id: slack-test-failure
-      uses: slackapi/slack-github-action@v1.19.0
-      with:
-        channel-id: C02NNKV205R
-        payload: |
-          {
-            "thread_ts": "${{ github.event.inputs.thread_ts }}",
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text":  "Test result: :no_entry: ${{ job.status }}"
-                }
-              },
-             {
-                "type": "section",
-                "fields": [
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Server:*\n${{ github.event.inputs.environment }}"
-                  },
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Target:*\n${{ github.event.inputs.mock_tags }}"
-                  }
-                ]
-              }
-            ]
-          }
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      if: ${{ steps.pytest.outcome }} == 'failure'  
-      
-    - name: Notify test cancellation to Slack
-      id: slack-test-cancelled
-      uses: slackapi/slack-github-action@v1.19.0
-      with:
-        channel-id: C02NNKV205R
-        payload: |
-          {
-            "thread_ts": "${{ github.event.inputs.thread_ts }}",
-            "blocks": [
-               {
-                  "type": "section",
-                    {
-                      "type": "mrkdwn",
-                      "text": "Test cancelled"
-                    }
-                }
-            ]
-          }
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      if: ${{ steps.pytest.outcome }} == ''
+      if: always()
 
     - name: Send test report to Slack
       run: |
         curl -F file=@report.html -F "initial_comment=[Actions] Test Report" \
         -F channels=C02NNKV205R -F thread_ts=${{ github.event.inputs.thread_ts }} \
         -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" https://slack.com/api/files.upload
-      if: ${{ steps.pytest.outcome }} == 'failure'
+      if: failure()
