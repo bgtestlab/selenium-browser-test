@@ -74,7 +74,7 @@ jobs:
           }
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      if: always()
+      if: success() || failure()
 
     - name: Send test report to Slack
       run: |
