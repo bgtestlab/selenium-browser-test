@@ -29,11 +29,15 @@ jobs:
         payload: |
           {
             "thread_ts": "${{ github.event.inputs.thread_ts }}",
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "[Actions] New job has been started from <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|URL>"
-            }
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "[Actions] New job has been started from <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|URL>"
+                  }
+                }
+              ]
           }
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
