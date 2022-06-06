@@ -56,12 +56,17 @@ jobs:
         docker-compose --env-file=.test.env -f ./docker_with_slack/docker/docker-compose.yaml up \
         --abort-on-container-exit \
         --exit-code-from test-runner
+    
+    - name: Temp test
+      run: echo "${{ steps.pytest.outcome }}"
+      if: always()
 
+  
     - name: Extract test results
       run: |
         docker cp test-runner:/app/results.json .
         cat ./results.json
-      if: steps.pytest.outcome == 'success' || steps.pytest.outcome == 'failure'
+      if: always()
 
     - name: Extract report HTML
       run: docker cp test-runner:/app/report.html .
