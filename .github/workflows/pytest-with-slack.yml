@@ -72,7 +72,7 @@ jobs:
     - name: Extract report HTML
       run: |
         docker cp test-runner:/app/report.html .
-        echo "${{ fromJson(steps.set-results.outputs.results-json).total }}"
+        echo "${{ steps.set-results.outputs.results-json }}"
       if: failure()
       
     - name: Send test results message to Slack
