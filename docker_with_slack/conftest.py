@@ -5,10 +5,12 @@ from datetime import datetime
 
 import pytest
 from selenium import webdriver
-from collections import OrderedDict
 
-test_results = OrderedDict()
-
+test_results = {
+    "total": 0,
+    "success": 0,
+    "failure": 0,
+}
 
 def get_current_test():
     """Just a helper function to extract the current test"""
@@ -41,17 +43,37 @@ def pytest_runtest_makereport(item, call):
     extra = getattr(report, "extra", [])
 
     if report.when == "call":
+        test_results["total"] += 1
+        
         # Setup report file
         xfail = hasattr(report, "wasxfail")
         if (report.skipped and xfail) or (report.failed and not xfail):
+            test_results["failure"] += 1
+            
             # only add additional html on failure
             driver = item.funcargs["driver"]
             screenshot = _take_screenshot(driver, nodeid=report.nodeid)
             extra.append(pytest_html.extras.image(screenshot, ""))
-            extra.append(pytest_html.extras.html("<div>Additional HTML</div>"))
-        report.extra = extra
+            report.extra = extra
+        else:
+            test_results["success"] += 1
+
+            
+def pytest_html_report_title(report):
+    report.title = "Test Report"
 
 
+def pytest_configure(config):
+    config._metadata.pop("JAVA_HOME")
+    config._metadata.pop("Packages")
+
+    
+def pytest_unconfigure(config):
+    test_results_file_path = "./results.json"
+    with open(test_results_file_path, "w") as outfile:
+        json.dump(test_results, outfile, indent=4)
+
+        
 @pytest.fixture(scope="package", autouse=True)
 def driver():
     options = webdriver.ChromeOptions()
