@@ -68,8 +68,8 @@ jobs:
       run: docker cp test-runner:/app/report.html .
       if: steps.pytest.outcome == 'failure'
       
-    - name: Send test results message to Slack
-      id: slack-test-finished
+    - name: Send success test results message to Slack
+      id: slack-test-success
       uses: slackapi/slack-github-action@v1.19.0
       with:
         channel-id: C02NNKV205R
@@ -81,7 +81,7 @@ jobs:
                 "type": "header",
                 "text": {
                   "type": "plain_text",
-                  "text":  "Test result: ${{ job.status }}"
+                  "text":  "Test result: :white_check_mark: ${{ job.status }}"
                 }
               },
              {
@@ -101,7 +101,42 @@ jobs:
           }
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      if: steps.pytest.outcome == 'success' || steps.pytest.outcome == 'failure'
+      if: steps.pytest.outcome == 'success'
+      
+    - name: Send failure test results message to Slack
+      id: slack-test-failure
+      uses: slackapi/slack-github-action@v1.19.0
+      with:
+        channel-id: C02NNKV205R
+        payload: |
+          {
+            "thread_ts": "${{ github.event.inputs.thread_ts }}",
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text":  "Test result: :no_entry: ${{ job.status }}"
+                }
+              },
+             {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Server:*\n${{ github.event.inputs.environment }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Target:*\n${{ github.event.inputs.mock_tags }}"
+                  }
+                ]
+              }
+            ]
+          }
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      if: steps.pytest.outcome == 'failure'  
       
     - name: Notify test cancellation to Slack
       id: slack-test-cancelled
