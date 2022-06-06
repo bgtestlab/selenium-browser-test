@@ -77,6 +77,7 @@ jobs:
           path: 'results.json'
           prop_path: 'total'
     - run: echo ${{steps.total.outputs.total}} 
+      if: always()
 
     - name: Extract report HTML
       run: |
