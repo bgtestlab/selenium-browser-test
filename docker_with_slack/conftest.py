@@ -65,7 +65,6 @@ def pytest_html_report_title(report):
 
 
 def pytest_configure(config):
-    config._metadata.pop("JAVA_HOME")
     config._metadata.pop("Packages")
 
     
