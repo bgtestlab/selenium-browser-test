@@ -21,6 +21,22 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      
+    - name: Notify a new job start
+      uses: slackapi/slack-github-action@v1.19.0
+      with:
+        channel-id: C02NNKV205R
+        payload: |
+          {
+            "thread_ts": "${{ github.event.inputs.thread_ts }}",
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "[Actions] New job URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+          }
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
     - name: Create env file
       run: |
@@ -45,7 +61,7 @@ jobs:
       if: steps.pytest.outcome == 'failure'
       
     - name: Send test results message to Slack
-      id: slack
+      id: slack-result-on-success
       uses: slackapi/slack-github-action@v1.19.0
       with:
         channel-id: C02NNKV205R
