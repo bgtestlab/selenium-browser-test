@@ -56,7 +56,7 @@ jobs:
         docker-compose --env-file=.test.env -f ./docker_with_slack/docker/docker-compose.yaml up \
         --abort-on-container-exit \
         --exit-code-from test-runner
-
+      
     - name: Extract test results
       id: set-results
       run: |
@@ -69,13 +69,21 @@ jobs:
         echo "::set-output name=results-json::$content"
         echo "::set-output name=test::{\"include\":{\"project\":\"foo\",\"config\":\"Debug\"}}"
       if: always()
+      
+    - name: get total
+      id: total
+      uses: notiz-dev/github-action-json-property@release
+      with: 
+          path: 'results.json'
+          prop_path: 'total'
+    - run: echo ${{steps.total.outputs.total}} 
 
     - name: Extract report HTML
       run: |
         docker cp test-runner:/app/report.html .
         echo "${{ steps.set-results.outputs.test }}"
         echo "${{ fromJson(steps.set-results.outputs.test).project }}
-        echo "${{ steps.set-results.outputs.results-json }}"
+        echo "${{ steps.total.outputs.total }}"
       if: failure()
       
     - name: Send test results message to Slack
