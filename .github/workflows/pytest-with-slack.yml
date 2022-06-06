@@ -34,7 +34,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "[Actions] New job has been started from <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|URL>"
+                    "text": "[Actions] <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|New job> has been started"
                   }
                 }
               ]
