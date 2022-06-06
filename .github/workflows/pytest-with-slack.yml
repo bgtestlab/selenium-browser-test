@@ -14,7 +14,7 @@ on:
       mock_tags:
         description: 'Only used for priting Test scenario tags'
         default: ''
-
+        
 jobs:
   pytest:
     runs-on: ubuntu-latest
@@ -66,12 +66,13 @@ jobs:
         content="${content//'%'/'%25'}"
         content="${content//$'\n'/'%0A'}"
         content="${content//$'\r'/'%0D'}"
-        echo "::set-output name=resultsJson::$content"
-        echo "${{ fromJson(steps.set-results.outputs.resultsJson).total }}"
+        echo "::set-output name=results-json::$content"
       if: always()
 
     - name: Extract report HTML
-      run: docker cp test-runner:/app/report.html .
+      run: |
+        docker cp test-runner:/app/report.html .
+        echo "${{ fromJson(steps.set-results.outputs.results-json).total }}"
       if: failure()
       
     - name: Send test results message to Slack
@@ -95,7 +96,7 @@ jobs:
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "*Total:*\n${{ fromJson(steps.set-results.outputs.resultsJson).total }}"
+                    "text": "*Total:*\n${{ fromJson(steps.set-results.outputs.results-json).total }}"
                   }
                 ]
               }
