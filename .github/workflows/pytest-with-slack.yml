@@ -67,11 +67,13 @@ jobs:
         content="${content//$'\n'/'%0A'}"
         content="${content//$'\r'/'%0D'}"
         echo "::set-output name=results-json::$content"
+        echo "::set-output name=test::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
       if: always()
 
     - name: Extract report HTML
       run: |
         docker cp test-runner:/app/report.html .
+        echo "${{ steps.set-results.outputs.test }}"
         echo "${{ steps.set-results.outputs.results-json }}"
       if: failure()
       
