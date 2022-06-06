@@ -67,6 +67,7 @@ jobs:
         content="${content//$'\n'/'%0A'}"
         content="${content//$'\r'/'%0D'}"
         echo "::set-output name=resultsJson::$content"
+        echo "${{ fromJson(steps.set-results.outputs.resultsJson).total }}"
       if: always()
 
     - name: Extract report HTML
@@ -94,7 +95,7 @@ jobs:
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "*Total:*\n${{fromJson(steps.set-results.outputs.resultsJson).total}}"
+                    "text": "*Total:*\n${{ fromJson(steps.set-results.outputs.resultsJson).total }}"
                   }
                 ]
               }
