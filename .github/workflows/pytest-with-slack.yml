@@ -52,20 +52,24 @@ jobs:
     - name: Run pytest
       id: pytest
       run: |
-        exit 0
-#       run: |
-#         docker-compose --env-file=.test.env -f ./docker_with_slack/docker/docker-compose.yaml config
-#         docker-compose --env-file=.test.env -f ./docker_with_slack/docker/docker-compose.yaml up \
-#         --abort-on-container-exit \
-#         --exit-code-from test-runner
+        docker-compose --env-file=.test.env -f ./docker_with_slack/docker/docker-compose.yaml config
+        docker-compose --env-file=.test.env -f ./docker_with_slack/docker/docker-compose.yaml up \
+        --abort-on-container-exit \
+        --exit-code-from test-runner
 
     - name: Extract test results
       run: |
-        docker cp test-runner:/app/report.html .
+        docker cp test-runner:/app/results.json .
+        JSON=$(cat ./results.json)
+        echo '${{ fromJson(JSON).total }}'
+      if: steps.pytest.outcome == 'success' || steps.pytest.outcome == 'failure'
+
+    - name: Extract report HTML
+      run: docker cp test-runner:/app/report.html .
       if: steps.pytest.outcome == 'failure'
       
     - name: Send test results message to Slack
-      id: slack-result-on-success
+      id: slack-test-finished
       uses: slackapi/slack-github-action@v1.19.0
       with:
         channel-id: C02NNKV205R
@@ -75,10 +79,9 @@ jobs:
             "blocks": [
               {
                 "type": "header",
-                "color": "#2eb886",
                 "text": {
                   "type": "plain_text",
-                  "text":  "Test result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  "text":  "Test result: ${{ job.status }}"
                 }
               },
              {
@@ -98,7 +101,29 @@ jobs:
           }
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      if: steps.pytest.outcome == 'success'
+      if: steps.pytest.outcome == 'success' || steps.pytest.outcome == 'failure'
+      
+    - name: Notify test cancellation to Slack
+      id: slack-test-cancelled
+      uses: slackapi/slack-github-action@v1.19.0
+      with:
+        channel-id: C02NNKV205R
+        payload: |
+          {
+            "thread_ts": "${{ github.event.inputs.thread_ts }}",
+            "blocks": [
+               {
+                  "type": "section",
+                    {
+                      "type": "mrkdwn",
+                      "text": "Test cancelled"
+                    }
+                }
+            ]
+          }
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      if: steps.pytest.outcome == 'success' || steps.pytest.outcome == 'failure'
 
     - name: Send test report to Slack
       run: |
