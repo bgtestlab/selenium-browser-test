@@ -48,6 +48,7 @@ jobs:
         echo "TEST_ENVIRONMENT=${{ github.event.inputs.environment }}" >> .test.env
         echo "PYTEST_TAGS=${{ github.event.inputs.tags }}" >> .test.env
         cat .test.env
+        echo "${{ steps.pytest.outcome }}"
 
     - name: Run pytest
       id: pytest
@@ -70,7 +71,7 @@ jobs:
 
     - name: Extract report HTML
       run: docker cp test-runner:/app/report.html .
-      if: steps.pytest.outcome == 'failure'
+      if: ${{ steps.pytest.outcome }} == 'failure'
       
     - name: Send success test results message to Slack
       id: slack-test-success
@@ -105,7 +106,7 @@ jobs:
           }
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      if: steps.pytest.outcome == 'success'
+      if: ${{ steps.pytest.outcome }} == 'success'
       
     - name: Send failure test results message to Slack
       id: slack-test-failure
@@ -140,7 +141,7 @@ jobs:
           }
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      if: steps.pytest.outcome == 'failure'  
+      if: ${{ steps.pytest.outcome }} == 'failure'  
       
     - name: Notify test cancellation to Slack
       id: slack-test-cancelled
@@ -162,11 +163,11 @@ jobs:
           }
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      if: steps.pytest.outcome == 'success' || steps.pytest.outcome == 'failure'
+      if: ${{ steps.pytest.outcome }} == ''
 
     - name: Send test report to Slack
       run: |
         curl -F file=@report.html -F "initial_comment=[Actions] Test Report" \
         -F channels=C02NNKV205R -F thread_ts=${{ github.event.inputs.thread_ts }} \
         -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" https://slack.com/api/files.upload
-      if: steps.pytest.outcome == 'failure'
+      if: ${{ steps.pytest.outcome }} == 'failure'
