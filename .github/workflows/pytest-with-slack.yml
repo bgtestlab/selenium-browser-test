@@ -70,12 +70,13 @@ jobs:
         echo "::set-output name=test::{\"include\":{\"project\":\"foo\",\"config\":\"Debug\"}}"
       if: always()
       
-    - name: get total
+    - name: Get total
       id: total
       uses: notiz-dev/github-action-json-property@release
       with: 
           path: 'results.json'
           prop_path: 'total'
+      if: always()
     - run: echo ${{steps.total.outputs.total}} 
       if: always()
 
