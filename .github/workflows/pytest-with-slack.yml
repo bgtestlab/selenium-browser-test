@@ -60,8 +60,7 @@ jobs:
     - name: Extract test results
       run: |
         docker cp test-runner:/app/results.json .
-        JSON=$(cat ./results.json)
-        echo '${{ fromJson(JSON).total }}'
+        cat ./results.json
       if: steps.pytest.outcome == 'success' || steps.pytest.outcome == 'failure'
 
     - name: Extract report HTML
