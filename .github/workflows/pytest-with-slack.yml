@@ -74,7 +74,9 @@ jobs:
       if: always()
       
     - name: json test
-      run: echo '${{ fromJson(steps.set-results.outputs.results-json) }}'
+      run: |
+        echo '${{ steps.set-results.outputs.results-json }}'
+        echo '${{ fromJson(steps.set-results.outputs.results-json) }}'
       if: always()
 
     - name: Extract report HTML
