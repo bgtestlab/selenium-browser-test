@@ -61,23 +61,17 @@ jobs:
       id: set-results
       run: |
         docker cp test-runner:/app/results.json .
-        cat ./results.json
         content='cat ./results.json'
-        content="${content//'%'/'%25'}"
-        content="${content//$'\n'/'%0A'}"
-        content="${content//$'\r'/'%0D'}"
+        echo $content
+        total='echo $(jq -r '.total' <<< "$content")'
+        success='echo $(jq -r '.success' <<< "$content")'
+        failure='echo $(jq -r '.failure' <<< "$content")'
         echo "::set-output name=results-json::$content"
         echo "::set-output name=test::{\"include\":{\"project\":\"foo\",\"config\":\"Debug\"}}"
       if: always()
       
-    - name: Get total
-      id: total
-      uses: notiz-dev/github-action-json-property@release
-      with: 
-          path: 'results.json'
-          prop_path: 'total'
-      if: always()
-    - run: echo ${{steps.total.outputs.total}} 
+    - name: json test
+      run: echo '${{ fromJson(steps.set-results.outputs.results-json).total }}'
       if: always()
 
     - name: Extract report HTML
