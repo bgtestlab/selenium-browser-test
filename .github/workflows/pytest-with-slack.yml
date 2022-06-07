@@ -67,7 +67,7 @@ jobs:
         echo $total
         success='echo $(jq -r '.success' <<< "$content")'
         failure='echo $(jq -r '.failure' <<< "$content")'
-        JSON=$(cat ./your.json)
+        JSON=$(cat ./results.json)
         echo "::set-output name=results-json::${JSON//'%'/'%25'}"
         echo "::set-output name=test::$content"
         echo "::set-output name=test::{\"include\":{\"project\":\"foo\",\"config\":\"Debug\"}}"
