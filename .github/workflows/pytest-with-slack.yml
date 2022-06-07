@@ -64,14 +64,17 @@ jobs:
         content='cat ./results.json'
         echo $content
         total='echo $(jq -r '.total' <<< "$content")'
+        echo $total
         success='echo $(jq -r '.success' <<< "$content")'
         failure='echo $(jq -r '.failure' <<< "$content")'
-        echo "::set-output name=results-json::$content"
+        JSON=$(cat ./your.json)
+        echo "::set-output name=results-json::${JSON//'%'/'%25'}"
+        echo "::set-output name=test::$content"
         echo "::set-output name=test::{\"include\":{\"project\":\"foo\",\"config\":\"Debug\"}}"
       if: always()
       
     - name: json test
-      run: echo '${{ fromJson(steps.set-results.outputs.results-json).total }}'
+      run: echo '${{ fromJson(steps.set-results.outputs.results-json) }}'
       if: always()
 
     - name: Extract report HTML
